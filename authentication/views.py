@@ -19,7 +19,7 @@ def login(request, format=None):
     if user:
         return Response({'token': generate_jwt_token(user)})
     else:
-        return Response({'status': 'KO: Wrong credentials.'}, status=400)
+        return Response({'message': 'Incorrect credentials'}, status=400)
 
 
 @api_view(['POST'])
@@ -29,11 +29,11 @@ def signup(request, format=None):
         request.data.get('username'),
         password=request.data.get('password'),
     )
-    return Response({'status': 'ok'})
+    return Response({'message': 'User created'})
 
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def protected(request, format=None):
-    return Response({'status': 'ok'})
+    return Response({'message': f'Hi {request.user.username}!'})
